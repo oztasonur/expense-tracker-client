@@ -1,19 +1,41 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement signup logic
-    console.log('Signup submitted', { username, email, password });
+    setError('');
+    setSuccess('');
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/users/register', {
+        username,
+        email,
+        password
+      });
+
+      if (response.status === 200) {
+        setSuccess('User registered successfully!');
+        setUsername('');
+        setEmail('');
+        setPassword('');
+      }
+    } catch (err) {
+      setError(err.response?.data || 'An error occurred during registration');
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Sign Up</h2>
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
       <div className="form-group">
         <input
           type="text"
