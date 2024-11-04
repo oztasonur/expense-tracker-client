@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, PieChart, DollarSign, TrendingUp, Shield } from "lucide-react"
 import { Dashboard } from "@/components/Dashboard"
 import { DashboardLayout } from "@/components/layouts/DashboardLayout"
+import { AuthPage } from "@/components/auth/AuthPage"
 import './App.css'
 import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -23,7 +24,7 @@ function LandingPage() {
           <Button variant="ghost">Features</Button>
           <Button variant="ghost">Pricing</Button>
           <Button variant="ghost">About</Button>
-          <Button>Sign Up</Button>
+          <Button onClick={() => navigate('/auth')}>Sign Up</Button>
         </nav>
       </header>
 
@@ -40,7 +41,7 @@ function LandingPage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Button className="h-11 px-8" onClick={() => navigate('/dashboard')}>
+                <Button className="h-11 px-8" onClick={() => navigate('/auth')}>
                   Get Started 
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -107,6 +108,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/auth" element={<AuthPage />} />
           <Route path="/dashboard" element={
             <DashboardLayout>
               <Dashboard />
