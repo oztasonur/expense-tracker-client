@@ -78,32 +78,37 @@ export function AuthPage() {
       </div>
       
       <Card className="w-[400px]">
-        <CardHeader>
-          <CardTitle>Welcome</CardTitle>
-          <CardDescription>
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl text-center">Welcome</CardTitle>
+          <CardDescription className="text-center">
             Sign in to your account or create a new one
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login">
               <Form {...loginForm}>
-                <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+                <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-6">
                   <FormField
                     control={loginForm.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input type="email" {...field} />
-                        </FormControl>
                         <FormMessage />
+                        <FormLabel className="text-foreground/70">Email</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="name@example.com" 
+                            type="email" 
+                            className="border-input/30 bg-background/50"
+                            {...field} 
+                          />
+                        </FormControl>
                       </FormItem>
                     )}
                   />
@@ -112,11 +117,16 @@ export function AuthPage() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
                         <FormMessage />
+                        <FormLabel className="text-foreground/70">Password</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Enter your password" 
+                            type="password" 
+                            className="border-input/30 bg-background/50"
+                            {...field} 
+                          />
+                        </FormControl>
                       </FormItem>
                     )}
                   />
@@ -135,11 +145,15 @@ export function AuthPage() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
                         <FormMessage />
+                        <FormLabel className="text-foreground/70">Name</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Enter your name"
+                            className="border-input/30 bg-background/50"
+                            {...field} 
+                          />
+                        </FormControl>
                       </FormItem>
                     )}
                   />
@@ -148,11 +162,16 @@ export function AuthPage() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input type="email" {...field} />
-                        </FormControl>
                         <FormMessage />
+                        <FormLabel className="text-foreground/70">Email</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="name@example.com"
+                            type="email"
+                            className="border-input/30 bg-background/50"
+                            {...field} 
+                          />
+                        </FormControl>
                       </FormItem>
                     )}
                   />
@@ -161,11 +180,16 @@ export function AuthPage() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
                         <FormMessage />
+                        <FormLabel className="text-foreground/70">Password</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Create a password"
+                            type="password"
+                            className="border-input/30 bg-background/50"
+                            {...field} 
+                          />
+                        </FormControl>
                       </FormItem>
                     )}
                   />
@@ -174,11 +198,16 @@ export function AuthPage() {
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
                         <FormMessage />
+                        <FormLabel className="text-foreground/70">Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Confirm your password"
+                            type="password"
+                            className="border-input/30 bg-background/50"
+                            {...field} 
+                          />
+                        </FormControl>
                       </FormItem>
                     )}
                   />
