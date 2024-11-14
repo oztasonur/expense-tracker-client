@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DollarSign } from "lucide-react"
+import axios from 'axios';
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -65,9 +66,18 @@ export function AuthPage() {
   }
 
   async function onSignup(values: z.infer<typeof signupSchema>) {
-    // TODO: Implement actual signup logic
-    console.log(values)
-    navigate('/dashboard')
+    try {
+      const response = await axios.post('http://localhost:8080/api/users/register', {
+        username: values.username,
+        password: values.password,
+        email: values.email,
+      });
+      console.log(response.data);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error registering user:', error.response?.data || error.message);
+      // Optionally, handle error display to the user
+    }
   }
 
   return (
