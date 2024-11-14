@@ -24,7 +24,7 @@ import { DollarSign } from "lucide-react"
 import axios from 'axios';
 
 const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 })
 
@@ -44,7 +44,7 @@ export function AuthPage() {
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   })
@@ -60,9 +60,17 @@ export function AuthPage() {
   })
 
   async function onLogin(values: z.infer<typeof loginSchema>) {
-    // TODO: Implement actual login logic
-    console.log(values)
-    navigate('/dashboard')
+    try {
+      const response = await axios.post('http://localhost:8080/api/users/login', {
+        username: values.username,
+        password: values.password,
+      });
+      console.log(response.data);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error logging in:', error.response?.data || error.message);
+      // Optionally, handle error display to the user
+    }
   }
 
   async function onSignup(values: z.infer<typeof signupSchema>) {
@@ -106,15 +114,14 @@ export function AuthPage() {
                 <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-6">
                   <FormField
                     control={loginForm.control}
-                    name="email"
+                    name="username"
                     render={({ field }) => (
                       <FormItem>
                         <FormMessage />
-                        <FormLabel className="text-foreground/70">Email</FormLabel>
+                        <FormLabel className="text-foreground/70">Username</FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="name@example.com" 
-                            type="email" 
+                            placeholder="Enter your username" 
                             className="border-input/30 bg-background/50"
                             {...field} 
                           />
