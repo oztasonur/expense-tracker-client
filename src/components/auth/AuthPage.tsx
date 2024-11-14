@@ -28,7 +28,7 @@ const loginSchema = z.object({
 })
 
 const signupSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string()
@@ -51,7 +51,7 @@ export function AuthPage() {
   const signupForm = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -142,14 +142,14 @@ export function AuthPage() {
                 <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
                   <FormField
                     control={signupForm.control}
-                    name="name"
+                    name="username"
                     render={({ field }) => (
                       <FormItem>
                         <FormMessage />
-                        <FormLabel className="text-foreground/70">Name</FormLabel>
+                        <FormLabel className="text-foreground/70">Username</FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="Enter your name"
+                            placeholder="Enter your username"
                             className="border-input/30 bg-background/50"
                             {...field} 
                           />
