@@ -7,6 +7,8 @@ import { AuthPage } from "@/components/auth/AuthPage"
 import './App.css'
 import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { AuthProvider } from "@/contexts/AuthContext"
+import { ProtectedRoute } from "@/components/ProtectedRoute"
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -105,17 +107,21 @@ function LandingPage() {
 function App() {
   return (
     <ThemeProvider defaultTheme="dark">
-      <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/dashboard" element={
-            <DashboardLayout>
-              <Dashboard />
-            </DashboardLayout>
-          } />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Dashboard />
+                </DashboardLayout>
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   )
 }

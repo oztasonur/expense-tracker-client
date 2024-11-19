@@ -22,6 +22,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DollarSign } from "lucide-react"
 import axios from 'axios';
+import { useAuth } from '@/contexts/AuthContext';
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -40,6 +41,7 @@ const signupSchema = z.object({
 
 export function AuthPage() {
   const navigate = useNavigate()
+  const { setAuth } = useAuth();
   
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -65,7 +67,9 @@ export function AuthPage() {
         username: values.username,
         password: values.password,
       });
-      console.log(response.data);
+      
+      const { token, username } = response.data;
+      setAuth(token, username);
       navigate('/dashboard');
     } catch (error) {
       console.error('Error logging in:', error.response?.data || error.message);
