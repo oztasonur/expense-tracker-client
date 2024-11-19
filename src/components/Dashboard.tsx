@@ -4,8 +4,47 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { ArrowUpIcon, ArrowDownIcon, DollarSign, CreditCard, Wallet, LineChart } from "lucide-react"
+import { useEffect, useState } from "react"
+import api from "@/lib/axios"
+
+interface Expense {
+  id: number;
+  userId: number;
+  expenseName: string;
+  description: string;
+  amount: number;
+  currency: string;
+  expense: boolean;
+}
 
 export function Dashboard() {
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const response = await api.get('/expense/all');
+        setExpenses(response.data);
+      } catch (error) {
+        console.error('Error fetching expenses:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchExpenses();
+  }, []);
+
+  // Calculate totals
+  const totalBalance = expenses.reduce((acc, curr) => {
+    return curr.expense ? acc - curr.amount : acc + curr.amount;
+  }, 0);
+
+  const monthlySpending = expenses
+    .filter(exp => exp.expense)
+    .reduce((acc, curr) => acc + curr.amount, 0);
+
   return (
     <div className="flex-1 space-y-4 p-4 pt-6">
       <div className="flex items-center justify-between space-y-2">
@@ -22,9 +61,9 @@ export function Dashboard() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$5,231.89</div>
+            <div className="text-2xl font-bold">${totalBalance.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground">
-              +20.1% from last month
+              Updated just now
             </p>
           </CardContent>
         </Card>
@@ -34,9 +73,9 @@ export function Dashboard() {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$1,234.50</div>
+            <div className="text-2xl font-bold">${monthlySpending.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground">
-              +4.3% from last month
+              This month's expenses
             </p>
           </CardContent>
         </Card>
@@ -88,28 +127,31 @@ export function Dashboard() {
               <CardHeader>
                 <CardTitle>Recent Transactions</CardTitle>
                 <CardDescription>
-                  You made 12 transactions this month
+                  You have {expenses.length} transactions total
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-8">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="flex items-center">
-                      <Avatar className="h-9 w-9">
-                        <AvatarImage src={`https://avatar.vercel.sh/${i}.png`} alt="Avatar" />
-                        <AvatarFallback>TX</AvatarFallback>
-                      </Avatar>
-                      <div className="ml-4 space-y-1">
-                        <p className="text-sm font-medium leading-none">Shopping</p>
-                        <p className="text-sm text-muted-foreground">
-                          Apr 23, 2024
-                        </p>
+                  {isLoading ? (
+                    <div className="text-center text-muted-foreground">Loading...</div>
+                  ) : (
+                    expenses.slice(0, 5).map((expense) => (
+                      <div key={expense.id} className="flex items-center">
+                        <Avatar className="h-9 w-9">
+                          <AvatarFallback>{expense.expense ? '-' : '+'}</AvatarFallback>
+                        </Avatar>
+                        <div className="ml-4 space-y-1">
+                          <p className="text-sm font-medium leading-none">{expense.expenseName}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {expense.description}
+                          </p>
+                        </div>
+                        <div className={`ml-auto font-medium ${expense.expense ? 'text-red-500' : 'text-green-500'}`}>
+                          {expense.expense ? '-' : '+'}${expense.amount.toFixed(2)}
+                        </div>
                       </div>
-                      <div className="ml-auto font-medium">
-                        -$24.50
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
