@@ -1,5 +1,4 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -105,75 +104,22 @@ export function Dashboard() {
         </Card>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="transactions">Transactions</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Spending Overview</CardTitle>
-              </CardHeader>
-              <CardContent className="pl-2">
-                <div className="h-[240px] bg-muted/10 rounded-md flex items-center justify-center">
-                  Chart will go here
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="col-span-3">
-              <CardHeader>
-                <CardTitle>Recent Transactions</CardTitle>
-                <CardDescription>
-                  You made {expenses.length} transactions in total
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-8">
-                  {isLoading ? (
-                    <div className="text-center text-muted-foreground">Loading...</div>
-                  ) : (
-                    [...expenses]
-                      .reverse()
-                      .slice(0, 5)
-                      .map((expense) => (
-                        <div key={expense.id} className="flex items-center">
-                          <Avatar className="h-9 w-9">
-                            <AvatarFallback>{expense.expense ? '-' : '+'}</AvatarFallback>
-                          </Avatar>
-                          <div className="ml-4 space-y-1">
-                            <p className="text-sm font-medium leading-none">{expense.expenseName}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {expense.description}
-                            </p>
-                          </div>
-                          <div className={`ml-auto font-medium ${expense.expense ? 'text-red-500' : 'text-green-500'}`}>
-                            {expense.expense ? '-' : '+'}${expense.amount.toFixed(2)}
-                          </div>
-                        </div>
-                      ))
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-        <TabsContent value="transactions" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>All Transactions</CardTitle>
-              <CardDescription>
-                A complete list of your transactions
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-8">
-                {isLoading ? (
-                  <div className="text-center text-muted-foreground">Loading...</div>
-                ) : (
-                  [...expenses].reverse().map((expense) => (
+      <div className="grid gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Transactions</CardTitle>
+            <CardDescription>
+              All your transactions
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className={`space-y-8 ${expenses.length > 15 ? 'h-[400px] overflow-y-auto pr-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-track]:bg-muted-foreground/10' : ''}`}>
+              {isLoading ? (
+                <div className="text-center text-muted-foreground">Loading...</div>
+              ) : (
+                [...expenses]
+                  .reverse()
+                  .map((expense) => (
                     <div key={expense.id} className="flex items-center">
                       <Avatar className="h-9 w-9">
                         <AvatarFallback>{expense.expense ? '-' : '+'}</AvatarFallback>
@@ -189,12 +135,11 @@ export function Dashboard() {
                       </div>
                     </div>
                   ))
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 } 
