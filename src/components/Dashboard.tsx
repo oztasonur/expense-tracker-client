@@ -127,7 +127,7 @@ export function Dashboard() {
               <CardHeader>
                 <CardTitle>Recent Transactions</CardTitle>
                 <CardDescription>
-                  You have {expenses.length} transactions total
+                  You made {expenses.length} transactions in total
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -135,27 +135,64 @@ export function Dashboard() {
                   {isLoading ? (
                     <div className="text-center text-muted-foreground">Loading...</div>
                   ) : (
-                    expenses.slice(0, 5).map((expense) => (
-                      <div key={expense.id} className="flex items-center">
-                        <Avatar className="h-9 w-9">
-                          <AvatarFallback>{expense.expense ? '-' : '+'}</AvatarFallback>
-                        </Avatar>
-                        <div className="ml-4 space-y-1">
-                          <p className="text-sm font-medium leading-none">{expense.expenseName}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {expense.description}
-                          </p>
+                    [...expenses]
+                      .reverse()
+                      .slice(0, 5)
+                      .map((expense) => (
+                        <div key={expense.id} className="flex items-center">
+                          <Avatar className="h-9 w-9">
+                            <AvatarFallback>{expense.expense ? '-' : '+'}</AvatarFallback>
+                          </Avatar>
+                          <div className="ml-4 space-y-1">
+                            <p className="text-sm font-medium leading-none">{expense.expenseName}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {expense.description}
+                            </p>
+                          </div>
+                          <div className={`ml-auto font-medium ${expense.expense ? 'text-red-500' : 'text-green-500'}`}>
+                            {expense.expense ? '-' : '+'}${expense.amount.toFixed(2)}
+                          </div>
                         </div>
-                        <div className={`ml-auto font-medium ${expense.expense ? 'text-red-500' : 'text-green-500'}`}>
-                          {expense.expense ? '-' : '+'}${expense.amount.toFixed(2)}
-                        </div>
-                      </div>
-                    ))
+                      ))
                   )}
                 </div>
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+        <TabsContent value="transactions" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>All Transactions</CardTitle>
+              <CardDescription>
+                A complete list of your transactions
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-8">
+                {isLoading ? (
+                  <div className="text-center text-muted-foreground">Loading...</div>
+                ) : (
+                  [...expenses].reverse().map((expense) => (
+                    <div key={expense.id} className="flex items-center">
+                      <Avatar className="h-9 w-9">
+                        <AvatarFallback>{expense.expense ? '-' : '+'}</AvatarFallback>
+                      </Avatar>
+                      <div className="ml-4 space-y-1">
+                        <p className="text-sm font-medium leading-none">{expense.expenseName}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {expense.description}
+                        </p>
+                      </div>
+                      <div className={`ml-auto font-medium ${expense.expense ? 'text-red-500' : 'text-green-500'}`}>
+                        {expense.expense ? '-' : '+'}${expense.amount.toFixed(2)}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
