@@ -336,7 +336,9 @@ export function Dashboard() {
                   .map((expense) => (
                     <div key={expense.id} className="flex items-center">
                       <Avatar className="h-9 w-9">
-                        <AvatarFallback>{expense.expense ? '-' : '+'}</AvatarFallback>
+                        <AvatarFallback className={`${expense.expense ? 'bg-red-500/20 text-white' : 'bg-green-500/20 text-white'}`}>
+                          {expense.expense ? '-' : '+'}
+                        </AvatarFallback>
                       </Avatar>
                       <div className="ml-4 space-y-1">
                         <p className="text-sm font-medium leading-none">{expense.expenseName}</p>
